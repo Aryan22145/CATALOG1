@@ -12,7 +12,11 @@ async function readJsonFile(filePath) {
         const data = await fs.readFile(filePath, 'utf8');
         return JSON.parse(data);
     } catch (error) {
-        throw new Error(`Error reading file ${filePath}: ${error.message}`);
+        if (error.code === 'ENOENT') {
+            throw new Error(`File not found: ${filePath}`);
+        } else {
+            throw new Error(`Error reading file ${filePath}: ${error.message}`);
+        }
     }
 }
 
@@ -42,7 +46,6 @@ async function processAllTestCases(testDir) {
         results.forEach(({ file, secret }) => {
             console.log(`${file}: Secret = ${secret}`);
         });
-
     } catch (error) {
         console.error('Error processing test cases:', error.message);
         process.exit(1);
@@ -50,7 +53,7 @@ async function processAllTestCases(testDir) {
 }
 
 // Get test directory from command line argument or use default
-const testDir = process.argv[2] || './test-cases';
+const testDir = process.argv[2] ? path.resolve(process.argv[2]) : path.join(__dirname, 'test-cases');
 
 // Run the processor
 processAllTestCases(testDir)
