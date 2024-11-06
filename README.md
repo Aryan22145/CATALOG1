@@ -9,6 +9,10 @@ Download the test cases
 ``` bash
 https://github.com/Aryan22145/CATALOG1/test-cases
 ```
+Change the directory 
+```bash
+cd CATALOG1
+```
 
 Run the file
 ``` bash
